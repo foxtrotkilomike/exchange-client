@@ -1,0 +1,12 @@
+@import '../../styles/variables';
+
+.ticker {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  align-items: center;
+  border: 1px solid $color-border-dark;
+  border-radius: 5px;
+  box-shadow: $box-shadow;
+}
