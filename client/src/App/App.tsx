@@ -2,15 +2,12 @@ import React from 'react';
 
 import '../Styles/main.scss';
 import './App.module.scss';
-import Ticker from '../Components/Ticker';
-import Wrapper from '../Components/Wrapper';
+import Main from '../Pages/Main';
 
 function App() {
   return (
     <div className="app">
-      <Wrapper>
-        <Ticker />
-      </Wrapper>
+      <Main />
     </div>
   );
 }
