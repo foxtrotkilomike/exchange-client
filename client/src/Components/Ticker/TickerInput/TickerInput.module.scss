@@ -1,0 +1,9 @@
+@import '../../../styles/variables';
+
+.input {
+  padding: 10px;
+  width: 100%;
+  text-align: center;
+  background-color: $color-dropdown;
+  border: 1px solid $color-border;
+}

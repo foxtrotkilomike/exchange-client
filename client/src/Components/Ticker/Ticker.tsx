@@ -3,6 +3,7 @@ import { useState } from 'react';
 import Dropdown from './Dropdown';
 import classes from './Ticker.module.scss';
 import TickerControl from './TickerControl';
+import TickerInput from './TickerInput';
 import { instrumentOptions } from '../../Config/Data';
 import { Instrument } from '../../Enums';
 
@@ -10,6 +11,7 @@ const Ticker = (): JSX.Element => {
   const [selectedOptionValue, setSelectedOptionValue] = useState(
     Instrument.eur_usd,
   );
+  const [instrumentAmount, setInstrumentAmount] = useState<number | null>(null);
 
   return (
     <article className={classes.ticker}>
@@ -18,13 +20,7 @@ const Ticker = (): JSX.Element => {
         selectedOptionValue={selectedOptionValue}
         onChange={(option: Instrument) => setSelectedOptionValue(option)}
       />
-      <input
-        type="number"
-        min="0"
-        step="1"
-        placeholder="Amount"
-        className={classes.ticker__input}
-      />
+      <TickerInput value={instrumentAmount} onChange={setInstrumentAmount} />
       <TickerControl />
     </article>
   );
