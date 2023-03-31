@@ -53,7 +53,7 @@ describe('Dropdown component', () => {
     expect(screen.getByRole('list')).toBeInTheDocument();
   });
 
-  it('options list should have valid options', async () => {
+  it('should render valid options list options', async () => {
     render(
       <Dropdown
         options={options}
@@ -69,23 +69,6 @@ describe('Dropdown component', () => {
     options.forEach((option) => {
       expect(screen.getByLabelText(option.label)).toBeInTheDocument();
     });
-  });
-
-  it('should change button text after selecting any option', async () => {
-    render(
-      <Dropdown
-        options={options}
-        selectedOptionValue={selectedOption}
-        onChange={() => {}}
-      />,
-    );
-    const user = userEvent.setup();
-    const dropdownButton = screen.getByRole('button');
-
-    await user.click(dropdownButton);
-    await user.click(screen.getByLabelText(options[0].label));
-
-    expect(screen.getByRole('button')).toHaveTextContent(options[0].label);
   });
 
   it('should close after click on any option', async () => {

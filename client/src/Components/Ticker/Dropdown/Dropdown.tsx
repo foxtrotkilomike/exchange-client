@@ -62,6 +62,7 @@ const Dropdown = ({
           e.stopPropagation();
           setIsOpen((isOpen) => !isOpen);
         }}
+        aria-label="Select a trading instrument"
       >
         {selectedOptionLabel}
       </button>
