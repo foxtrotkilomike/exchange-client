@@ -1,0 +1,10 @@
+@import '../../../styles/variables';
+
+.table__header {
+  &-cell {
+    padding: 10px;
+    font-weight: bold;
+    background-color: $color-background-table-header;
+    border: 1px solid $color-border;
+  }
+}

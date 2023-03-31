@@ -1,0 +1,9 @@
+@import '../../../styles/variables';
+
+.table__row {
+  &-cell {
+    padding: 10px;
+    text-align: center;
+    border: 1px solid $color-background-table-cell;
+  }
+}
