@@ -5,10 +5,10 @@
   position: relative;
 
   &__button {
-    padding: 10px 10px;
+    padding: 10px;
     width: 100%;
     text-align: center;
-    background-color: $color-dropdown;
+    background-color: $color-button;
     border: 1px solid $color-border;
     border-radius: 5px;
     cursor: pointer;

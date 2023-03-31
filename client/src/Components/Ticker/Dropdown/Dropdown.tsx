@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 import classes from './Dropdown.module.scss';
 import { Instrument } from '../../../Enums';
@@ -70,4 +70,4 @@ const Dropdown = ({
   );
 };
 
-export default Dropdown;
+export default React.memo(Dropdown);
