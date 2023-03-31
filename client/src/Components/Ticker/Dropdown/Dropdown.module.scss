@@ -1,17 +1,14 @@
 @import '../../../styles/variables';
+@import '../../../styles/mixins';
 
 .dropdown {
   width: 100%;
   position: relative;
 
   &__button {
-    padding: 10px;
+    @include button;
     width: 100%;
-    text-align: center;
     background-color: $color-button;
-    border: 1px solid $color-border;
-    border-radius: 5px;
-    cursor: pointer;
   }
 
   &__list {

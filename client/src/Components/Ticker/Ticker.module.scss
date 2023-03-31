@@ -10,3 +10,15 @@
   border-radius: 5px;
   box-shadow: $box-shadow;
 }
+
+.controls-wrapper {
+  display: flex;
+  gap: 10px;
+  justify-content: space-between;
+}
+
+.control-separator {
+  height: 110px;
+  border: 1px solid $color-border;
+  align-self: stretch;
+}

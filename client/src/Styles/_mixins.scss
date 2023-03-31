@@ -35,3 +35,11 @@
     @content;
   }
 }
+
+@mixin button {
+  padding: 10px;
+  text-align: center;
+  border: 1px solid $color-border;
+  border-radius: 5px;
+  cursor: pointer;
+}
