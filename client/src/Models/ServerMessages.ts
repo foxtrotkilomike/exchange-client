@@ -1,25 +1,32 @@
 import { Envelope, Message, Quote } from './Base';
-import { Instrument, OrderStatus } from '../Config/Enums';
+import { Instrument, OrderStatus, ServerMessageType } from '../Config/Enums';
 
 export interface ServerEnvelope extends Envelope {
-  messageType: ServerMessage;
+  messageType: ServerMessageType;
+  message: ServerMessage;
 }
 
-export type ServerMessage = Message;
+export type ServerMessageInit = Message;
 
-export interface ErrorInfo extends ServerMessage {
+export interface ErrorInfo extends ServerMessageInit {
   reason: string;
 }
 
-export type SuccessInfo = ServerMessage;
+export type SuccessInfo = ServerMessageInit;
 
-export interface ExecutionReport extends ServerMessage {
+export interface ExecutionReport extends ServerMessageInit {
   orderId: string;
   orderStatus: OrderStatus;
 }
 
-export interface MarketDataUpdate extends ServerMessage {
+export interface MarketDataUpdate extends ServerMessageInit {
   subscriptionId: string;
   instrument: Instrument;
   quotes: [Quote];
 }
+
+export type ServerMessage =
+  | ErrorInfo
+  | SuccessInfo
+  | ExecutionReport
+  | MarketDataUpdate;
