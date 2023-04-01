@@ -1,4 +1,4 @@
-import { Instrument } from '../Enums';
+import { Instrument } from '../Config/Enums';
 
 export type Option = {
   value: Instrument;

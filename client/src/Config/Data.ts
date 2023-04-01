@@ -1,6 +1,6 @@
 import Decimal from 'decimal.js';
 
-import { Instrument, OrderSide, OrderStatus } from '../Enums';
+import { Instrument, OrderSide, OrderStatus } from './Enums';
 import { Option } from '../Types/Option';
 import TableRow from '../Types/TableRow';
 

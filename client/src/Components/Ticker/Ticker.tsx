@@ -8,7 +8,7 @@ import TickerControl from './TickerControl';
 import { ButtonType } from './TickerControl/TickerControl';
 import TickerInput from './TickerInput';
 import { instrumentOptions } from '../../Config/Data';
-import { Instrument } from '../../Enums';
+import { Instrument } from '../../Config/Enums';
 
 const sellingRate = new Decimal(8.558);
 const purchaseRate = new Decimal(8.559);

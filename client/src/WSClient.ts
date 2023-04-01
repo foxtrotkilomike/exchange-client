@@ -5,7 +5,7 @@ import {
   Instrument,
   OrderSide,
   ServerMessageType,
-} from './Enums';
+} from './Config/Enums';
 import { ClientMessage } from './Models/ClientMessages';
 import { ServerEnvelope } from './Models/ServerMessages';
 

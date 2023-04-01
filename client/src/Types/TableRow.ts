@@ -1,6 +1,6 @@
 import Decimal from 'decimal.js';
 
-import { Instrument, OrderSide, OrderStatus } from '../Enums';
+import { Instrument, OrderSide, OrderStatus } from '../Config/Enums';
 
 interface TableRow {
   id: number;

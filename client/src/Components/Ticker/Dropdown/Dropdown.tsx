@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 
 import classes from './Dropdown.module.scss';
-import { Instrument } from '../../../Enums';
+import { Instrument } from '../../../Config/Enums';
 import { Option } from '../../../Types/Option';
 
 type DropdownProps = {

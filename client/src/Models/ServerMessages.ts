@@ -1,5 +1,5 @@
 import { Envelope, Message, Quote } from './Base';
-import { Instrument, OrderStatus } from '../Enums';
+import { Instrument, OrderStatus } from '../Config/Enums';
 
 export interface ServerEnvelope extends Envelope {
   messageType: ServerMessage;

@@ -12,19 +12,19 @@ export enum ServerMessageType {
 }
 
 export enum OrderSide {
-  buy = 1,
-  sell,
+  buy = 'Buy',
+  sell = 'Sell',
 }
 
 export enum OrderStatus {
-  active = 1,
-  filled,
-  rejected,
-  cancelled,
+  active = 'Active',
+  filled = 'Filled',
+  rejected = 'Rejected',
+  cancelled = 'Cancelled',
 }
 
 export enum Instrument {
-  eur_usd = 1,
-  eur_rub,
-  usd_rub,
+  eur_usd = 'EUR/USD',
+  eur_rub = 'EUR/RUB',
+  usd_rub = 'USD/RUB',
 }

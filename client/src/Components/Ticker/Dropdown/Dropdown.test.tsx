@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event';
 
 import Dropdown from './Dropdown';
 import '@testing-library/jest-dom';
-import { Instrument } from '../../../Enums';
+import { Instrument } from '../../../Config/Enums';
 import { Option } from '../../../Types/Option';
 
 const options: Option[] = [
