@@ -8,9 +8,10 @@ import {
 } from './Config/Enums';
 import { ClientEnvelope } from './Models/ClientMessages';
 import { ServerEnvelope } from './Models/ServerMessages';
+import IWSConnector from './Types/IWSConnector';
 import WebSocket from './WebSocket';
 
-export default class WSConnector {
+export default class WSConnector implements IWSConnector {
   connection: WebSocket | undefined;
 
   constructor() {
