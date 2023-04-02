@@ -7,7 +7,7 @@
   box-shadow: $box-shadow;
 
   tbody tr:nth-child(2n) {
-    background-color: $color-button;
+    background-color: $color-background-table-cell;
   }
 
   tr:last-child td:first-child {
