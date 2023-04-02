@@ -1,6 +1,6 @@
-import { useCallback, useState } from 'react';
+import { useCallback } from 'react';
 
-import Decimal from 'decimal.js';
+import { observer } from 'mobx-react-lite';
 
 import Dropdown from './Dropdown';
 import classes from './Ticker.module.scss';
@@ -9,31 +9,37 @@ import { ButtonType } from './TickerControl/TickerControl';
 import TickerInput from './TickerInput';
 import { instrumentOptions } from '../../Config/Data';
 import { Instrument } from '../../Config/Enums';
+import MainStore from '../../Store/MainStore';
 
-const sellingRate = new Decimal(8.558);
-const purchaseRate = new Decimal(8.559);
+type TickerProps = {
+  store: MainStore;
+};
 
-const Ticker = (): JSX.Element => {
-  const [selectedOptionValue, setSelectedOptionValue] = useState(
-    Instrument.eur_usd,
-  );
-  const [instrumentAmount, setInstrumentAmount] = useState<number | null>(null);
+const Ticker = ({ store }: TickerProps): JSX.Element => {
+  const {
+    chosenInstrument,
+    instrumentAmount,
+    sellingRate,
+    purchaseRate,
+    setInstrument,
+    setInstrumentAmount,
+  } = store;
 
   const handleSell = useCallback(() => {
-    console.log(sellingRate.times(instrumentAmount || 0));
+    console.log(sellingRate?.times(instrumentAmount || 0));
     setInstrumentAmount(null);
-  }, [instrumentAmount]);
+  }, [sellingRate, instrumentAmount, setInstrumentAmount]);
   const handlePurchase = useCallback(() => {
-    console.log(purchaseRate.times(instrumentAmount || 0));
+    console.log(purchaseRate?.times(instrumentAmount || 0));
     setInstrumentAmount(null);
-  }, [instrumentAmount]);
+  }, [purchaseRate, instrumentAmount, setInstrumentAmount]);
 
   return (
     <article className={classes.ticker}>
       <Dropdown
         options={instrumentOptions}
-        selectedOptionValue={selectedOptionValue}
-        onChange={(option: Instrument) => setSelectedOptionValue(option)}
+        selectedOptionValue={chosenInstrument}
+        onChange={(option: Instrument) => setInstrument(option)}
       />
       <TickerInput value={instrumentAmount} onChange={setInstrumentAmount} />
       <div className={classes['controls-wrapper']}>
@@ -53,4 +59,4 @@ const Ticker = (): JSX.Element => {
   );
 };
 
-export default Ticker;
+export default observer(Ticker);

@@ -1,10 +1,12 @@
 import React, { useCallback } from 'react';
 
+import Decimal from 'decimal.js';
+
 import classes from './TickerInput.module.scss';
 
 type TickerInputProps = {
-  value: number | null;
-  onChange: (value: number) => void;
+  value: Decimal | null;
+  onChange: (value: Decimal) => void;
 };
 
 const placeholder = 'Amount';
@@ -20,12 +22,12 @@ const TickerInput = ({ value, onChange }: TickerInputProps): JSX.Element => {
 
   const handleChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
-      onChange(Number(e.target.value) || 0);
+      onChange(new Decimal(e.target.value) || 0);
     },
     [onChange],
   );
 
-  const inputValue = value === null ? '' : value;
+  const inputValue = value === null ? '' : value.toNumber();
 
   return (
     <input
