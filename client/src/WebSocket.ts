@@ -1,7 +1,7 @@
 import { WSEvent } from './Config/Enums';
 import MessageEvent from './MessageEvent';
 import Server from './Server';
-import TMessageEvent from './Types/MessageEvent';
+import MessageEventT from './Types/MessageEvent';
 
 export default class WebSocket extends EventTarget {
   private _url: string;
@@ -23,13 +23,14 @@ export default class WebSocket extends EventTarget {
     this._server.addEventListener(WSEvent.close, cb);
   };
 
-  onmessage = (cb: (event: TMessageEvent) => void) => {
+  onmessage = (cb: (event: MessageEventT) => void) => {
     this._server.addEventListener(WSEvent.message, (e) => {
       if (e.hasOwnProperty('data')) {
-        cb(e as TMessageEvent);
+        cb(e as MessageEventT);
       }
     });
   };
+
   onerror = (cb: () => void) => {
     this._server.addEventListener(WSEvent.error, cb);
   };
