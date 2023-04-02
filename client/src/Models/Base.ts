@@ -16,3 +16,10 @@ export interface Quote {
   minAmount: Decimal;
   maxAmount: Decimal;
 }
+
+export interface QuoteString {
+  bid: string;
+  offer: string;
+  minAmount: string;
+  maxAmount: string;
+}

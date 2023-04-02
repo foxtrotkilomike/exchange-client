@@ -11,31 +11,37 @@ import { ServerEnvelope } from './Models/ServerMessages';
 import IWSConnector from './Types/IWSConnector';
 import WebSocket from './WebSocket';
 
+type ServerResponseHandler = (message: ServerEnvelope) => void;
+
 export default class WSConnector implements IWSConnector {
   connection: WebSocket | undefined;
+  onMarketDataUpdate;
+  onSuccessMessage;
 
-  constructor() {
+  constructor(
+    onMarketDataUpdate: ServerResponseHandler,
+    onSuccessMessage: ServerResponseHandler,
+  ) {
     this.connection = undefined;
+    this.onMarketDataUpdate = onMarketDataUpdate;
+    this.onSuccessMessage = onSuccessMessage;
   }
 
   connect = () => {
     this.connection = new WebSocket('ws://127.0.0.1:3000/ws/');
     this.connection.onclose(() => {
-      console.log('Server closed the connection');
       this.connection = undefined;
     });
 
     this.connection.onerror(() => {});
 
-    this.connection.onopen(() => {
-      console.log('Server opened the connection');
-    });
+    this.connection.onopen(() => {});
 
     this.connection.onmessage((event) => {
       const message: ServerEnvelope = JSON.parse(event.data);
       switch (message.messageType) {
         case ServerMessageType.success:
-          console.log('Client received success', message.message);
+          this.onSuccessMessage(message);
           break;
         case ServerMessageType.error:
           break;
@@ -43,6 +49,7 @@ export default class WSConnector implements IWSConnector {
           console.log('Client received executionReport', message.message);
           break;
         case ServerMessageType.marketDataUpdate:
+          this.onMarketDataUpdate(message);
           break;
       }
     });

@@ -1,5 +1,3 @@
-import { observer } from 'mobx-react-lite';
-
 import Table from '../../Components/Table';
 import Ticker from '../../Components/Ticker';
 import Wrapper from '../../Components/Wrapper';
@@ -17,4 +15,4 @@ const Main = (): JSX.Element => {
   );
 };
 
-export default observer(Main);
+export default Main;

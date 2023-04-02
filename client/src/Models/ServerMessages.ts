@@ -1,4 +1,4 @@
-import { Envelope, Message, Quote } from './Base';
+import { Envelope, Message, Quote, QuoteString } from './Base';
 import { Instrument, OrderStatus, ServerMessageType } from '../Config/Enums';
 
 export interface ServerEnvelope extends Envelope {
@@ -22,7 +22,19 @@ export interface ExecutionReport extends ServerMessageInit {
 export interface MarketDataUpdate extends ServerMessageInit {
   subscriptionId: string;
   instrument: Instrument;
-  quotes: [Quote];
+  quotes: {
+    sell: Quote[];
+    purchase: Quote[];
+  };
+}
+
+export interface ClientMarketDataUpdate extends ServerMessageInit {
+  subscriptionId: string;
+  instrument: Instrument;
+  quotes: {
+    sell: QuoteString[];
+    purchase: QuoteString[];
+  };
 }
 
 export type ServerMessage =
