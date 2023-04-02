@@ -25,14 +25,17 @@ const Ticker = ({ store }: TickerProps): JSX.Element => {
     setInstrumentAmount,
   } = store;
 
+  const currentSellingRate = sellingRate.at(-1);
+  const currentPurchaseRate = purchaseRate.at(-1);
+
   const handleSell = useCallback(() => {
-    console.log(sellingRate?.times(instrumentAmount || 0));
+    console.log(currentSellingRate?.times(instrumentAmount || 0).toString());
     setInstrumentAmount(null);
-  }, [sellingRate, instrumentAmount, setInstrumentAmount]);
+  }, [currentSellingRate, instrumentAmount, setInstrumentAmount]);
   const handlePurchase = useCallback(() => {
-    console.log(purchaseRate?.times(instrumentAmount || 0));
+    console.log(currentPurchaseRate?.times(instrumentAmount || 0).toString());
     setInstrumentAmount(null);
-  }, [purchaseRate, instrumentAmount, setInstrumentAmount]);
+  }, [currentPurchaseRate, instrumentAmount, setInstrumentAmount]);
 
   return (
     <article className={classes.ticker}>
@@ -44,13 +47,13 @@ const Ticker = ({ store }: TickerProps): JSX.Element => {
       <TickerInput value={instrumentAmount} onChange={setInstrumentAmount} />
       <div className={classes['controls-wrapper']}>
         <TickerControl
-          value={sellingRate}
+          value={currentSellingRate}
           onClick={handleSell}
           buttonType={ButtonType.sell}
         />
         <div className={classes['control-separator']} />
         <TickerControl
-          value={purchaseRate}
+          value={currentPurchaseRate}
           onClick={handlePurchase}
           buttonType={ButtonType.buy}
         />

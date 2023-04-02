@@ -9,7 +9,7 @@ export enum ButtonType {
 }
 
 type TickerControlProps = {
-  value: Decimal | null;
+  value: Decimal | undefined;
   buttonType: ButtonType;
   onClick: () => void;
 };
@@ -20,7 +20,7 @@ const TickerControl = ({
   onClick,
 }: TickerControlProps): JSX.Element => {
   const renderControlValue = (value: Decimal) => {
-    const [whole, fraction] = value.toFixed(3).toString().split('.');
+    const [whole, fraction] = value.toFixed(3).split('.');
     const accentFraction = fraction.split('').slice(0, 2);
     const restFraction = fraction.split('').slice(2);
     return (
@@ -40,7 +40,7 @@ const TickerControl = ({
   return (
     <div className={classes.control}>
       <p className={classes.control__text} title={value?.toString()}>
-        {value === null ? '-' : renderControlValue(value)}
+        {value === undefined ? '-' : renderControlValue(value)}
       </p>
       <button onClick={onClick} className={buttonClassName}>
         {buttonType}
