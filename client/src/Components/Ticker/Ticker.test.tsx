@@ -3,11 +3,20 @@ import userEvent from '@testing-library/user-event';
 
 import Ticker from './Ticker';
 import '@testing-library/jest-dom';
+import MainStoreStub from '../../__tests__/__mocks__/MainStore';
 import { instrumentOptions } from '../../Config/Data';
+import MainStore from '../../Store/MainStore';
+
+let store = new MainStoreStub() as unknown as MainStore;
+
+beforeEach(() => {
+  store.destroy();
+  store = new MainStoreStub() as unknown as MainStore;
+});
 
 describe('Ticker component', () => {
   it('should change dropdown button text after selecting any option', async () => {
-    render(<Ticker />);
+    render(<Ticker store={store} />);
     const user = userEvent.setup();
     const dropdownButton = screen.getByLabelText('Select a trading instrument');
 
@@ -18,16 +27,19 @@ describe('Ticker component', () => {
   });
 
   it('should change input value on type', async () => {
-    render(<Ticker />);
+    const { rerender } = render(<Ticker store={store} />);
     const user = userEvent.setup();
     const input = screen.getByRole('spinbutton');
-    await user.type(input, '123');
+    await user.type(input, '2');
 
-    expect(input).toHaveValue(123);
+    expect(store.instrumentAmount?.toNumber()).toEqual(2);
+    const updatedStore = { ...store } as MainStore;
+    rerender(<Ticker store={updatedStore} />);
+    expect(input).toHaveValue(2);
   });
 
   it('should clear input after click on purchase or sell', async () => {
-    render(<Ticker />);
+    render(<Ticker store={store} />);
     const user = userEvent.setup();
     const sellButton = screen.getByText(/sell/i);
     const purchaseButton = screen.getByText(/buy/i);
