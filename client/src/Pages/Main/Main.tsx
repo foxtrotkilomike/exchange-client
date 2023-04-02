@@ -1,17 +1,13 @@
-import React, { useEffect } from 'react';
+import { observer } from 'mobx-react-lite';
 
 import Table from '../../Components/Table';
 import Ticker from '../../Components/Ticker';
 import Wrapper from '../../Components/Wrapper';
-import WSConnector from '../../WSClient';
+import { useLocalStore } from '../../Hooks/useLocalStore';
+import MainStore from '../../Store/MainStore';
 
 const Main = (): JSX.Element => {
-  useEffect(() => {
-    const connection = new WSConnector();
-    connection.connect();
-
-    return () => connection.disconnect();
-  }, []);
+  const mainStore = useLocalStore(() => new MainStore());
 
   return (
     <Wrapper main growing centered outer>
@@ -21,4 +17,4 @@ const Main = (): JSX.Element => {
   );
 };
 
-export default React.memo(Main);
+export default observer(Main);
