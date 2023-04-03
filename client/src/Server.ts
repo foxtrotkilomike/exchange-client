@@ -12,6 +12,7 @@ import MessageEvent from './MessageEvent';
 import { Quote } from './Models/Base';
 import {
   ClientEnvelope,
+  ServerPlaceOrder,
   SubscribeMarketData,
   UnsubscribeMarketData,
 } from './Models/ClientMessages';
@@ -133,14 +134,22 @@ export default class Server extends EventTarget {
   };
 
   placeOrder = (message: ClientEnvelope) => {
-    console.log('Sever received placeOrder', message.message);
-    this.send({
-      messageType: ServerMessageType.executionReport,
-      message: {
-        orderId: 123,
-        orderStatus: OrderStatus.filled,
-      },
-    });
+    const order = message.message as ServerPlaceOrder;
+    this.processOrder(order).then((orderStatus) =>
+      this.send({
+        messageType: ServerMessageType.executionReport,
+        message: {
+          orderId: order.orderId,
+          orderStatus,
+        },
+      }),
+    );
+  };
+
+  processOrder = async (order: ServerPlaceOrder): Promise<OrderStatus> => {
+    return new Promise((res) =>
+      setTimeout(() => res(OrderStatus.filled), 4000),
+    );
   };
 
   createSubscription = (
