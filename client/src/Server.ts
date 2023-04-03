@@ -17,6 +17,7 @@ import {
 } from './Models/ClientMessages';
 import { ServerEnvelope } from './Models/ServerMessages';
 import MessageEventT from './Types/MessageEvent';
+import generateId from './Utils/generateId';
 import WebSocket from './WebSocket';
 
 type QuotesMap = Record<Instrument, Quote[]>;
@@ -107,7 +108,7 @@ export default class Server extends EventTarget {
   subscribeMarketData = (message: ClientEnvelope) => {
     const subscriptionInstrument = (message.message as SubscribeMarketData)
       .instrument;
-    const subscriptionId = Math.round(Math.random() * 1000000).toString();
+    const subscriptionId = generateId();
 
     this.send({
       messageType: ServerMessageType.success,
