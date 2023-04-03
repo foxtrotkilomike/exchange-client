@@ -111,4 +111,6 @@ export default class WSConnector implements IWSConnector {
       },
     });
   };
+
+  validateConnection = () => !!this.connection;
 }

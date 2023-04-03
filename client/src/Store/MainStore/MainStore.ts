@@ -87,13 +87,20 @@ export default class MainStore implements ILocalStore {
     return this._timestamps;
   }
 
-  setInstrument = (instrument: Instrument) => {
-    if (instrument === this.chosenInstrument || !this._subscriptionId) return;
+  get subscriptionId(): string | null {
+    return this._subscriptionId;
+  }
 
-    this._connection.unsubscribeMarketData(this._subscriptionId);
-    this._sellingRate = [];
-    this._purchaseRate = [];
-    this._isActualSubscriptionId = false;
+  get isValidConnection(): boolean {
+    return this._connection.validateConnection();
+  }
+
+  setInstrument = (instrument: Instrument) => {
+    if (instrument === this.chosenInstrument) return;
+
+    if (this._subscriptionId) {
+      this._connection.unsubscribeMarketData(this._subscriptionId);
+    }
     this._chosenInstrument = instrument;
     this._connection.subscribeMarketData(this._chosenInstrument);
   };
@@ -143,6 +150,14 @@ export default class MainStore implements ILocalStore {
           this._isActualSubscriptionId = true;
         }
         break;
+
+      case 'unsubscribed' in message.message:
+        if ('unsubscribed' in message.message) {
+          this._sellingRate = [];
+          this._purchaseRate = [];
+          this._subscriptionId = null;
+          this._isActualSubscriptionId = false;
+        }
     }
   };
 

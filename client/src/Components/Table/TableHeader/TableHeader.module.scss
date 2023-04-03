@@ -10,13 +10,13 @@
 
     &_sort-up::after {
       position: relative;
-      content: '▲';
+      content: '\1F805';
       right: -5px;
     }
 
     &_sort-down::after {
       position: relative;
-      content: '▼';
+      content: '\1F807';
       right: -5px;
     }
   }
