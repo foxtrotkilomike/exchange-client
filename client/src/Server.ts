@@ -32,9 +32,9 @@ export default class Server extends EventTarget {
     [Instrument.usd_rub]: [],
   };
   private _sellPivotQuotes: PivotQuotesMap = {
-    [Instrument.eur_rub]: 65,
+    [Instrument.eur_rub]: 83,
     [Instrument.eur_usd]: 0.9,
-    [Instrument.usd_rub]: 60,
+    [Instrument.usd_rub]: 74,
   };
   private _purchaseQuotes: QuotesMap = {
     [Instrument.eur_rub]: [],
@@ -42,10 +42,11 @@ export default class Server extends EventTarget {
     [Instrument.usd_rub]: [],
   };
   private _purchasePivotQuotes: PivotQuotesMap = {
-    [Instrument.eur_rub]: 70,
+    [Instrument.eur_rub]: 85,
     [Instrument.eur_usd]: 1,
-    [Instrument.usd_rub]: 65,
+    [Instrument.usd_rub]: 76,
   };
+  private _timestamps: string[] = [];
   private _updateQuotesIntervalId: ReturnType<typeof setInterval> | null = null;
   private _subscriptionsId: Record<string, ReturnType<typeof setInterval>> = {};
   private _quotesUpdateInterval = 3000;
@@ -166,6 +167,7 @@ export default class Server extends EventTarget {
             quotes: {
               sell: this._sellQuotes[subscriptionInstrument],
               purchase: this._purchaseQuotes[subscriptionInstrument],
+              timestamps: this._timestamps,
             },
           },
         }),
@@ -178,6 +180,7 @@ export default class Server extends EventTarget {
   updateAllQuotes = () => {
     this.updateSellQuotes();
     this.updatePurchaseQuotes();
+    this.updateTimestamps();
   };
 
   updateSellQuotes = () => {
@@ -188,6 +191,10 @@ export default class Server extends EventTarget {
   updatePurchaseQuotes = () => {
     const [quotes, pivotQuotes] = this.getQuotes(OrderSide.buy);
     this.updateQuotes(quotes, pivotQuotes);
+  };
+
+  updateTimestamps = () => {
+    this._timestamps.push(new Date().toLocaleString('ru-RU'));
   };
 
   updateQuotes = (quotes: QuotesMap, pivotQuotes: PivotQuotesMap) => {

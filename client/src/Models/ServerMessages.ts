@@ -25,6 +25,7 @@ export interface MarketDataUpdate extends ServerMessageInit {
   quotes: {
     sell: Quote[];
     purchase: Quote[];
+    timestamps: string[];
   };
 }
 
@@ -34,6 +35,7 @@ export interface ClientMarketDataUpdate extends ServerMessageInit {
   quotes: {
     sell: QuoteString[];
     purchase: QuoteString[];
+    timestamps: string[];
   };
 }
 

@@ -19,6 +19,7 @@ type PrivateFields =
   | '_instrumentAmount'
   | '_sellingRate'
   | '_purchaseRate'
+  | '_timestamps'
   | '_orders';
 
 export default class MainStore implements ILocalStore {
@@ -30,6 +31,7 @@ export default class MainStore implements ILocalStore {
   private _subscriptionId: string | null = null;
   private _isActualSubscriptionId = false;
   private _orders: Record<string, ClientPlaceOrder> = {};
+  private _timestamps: string[] = [];
 
   constructor() {
     makeObservable<MainStore, PrivateFields>(this, {
@@ -39,6 +41,7 @@ export default class MainStore implements ILocalStore {
       _sellingRate: observable.ref,
       _purchaseRate: observable.ref,
       _orders: observable.ref,
+      _timestamps: observable.ref,
       chosenInstrument: computed,
       instrumentAmount: computed,
       sellingRate: computed,
@@ -78,6 +81,10 @@ export default class MainStore implements ILocalStore {
 
   get orders(): Record<string, ClientPlaceOrder> {
     return this._orders;
+  }
+
+  get timestamps(): string[] {
+    return this._timestamps;
   }
 
   setInstrument = (instrument: Instrument) => {
@@ -125,7 +132,6 @@ export default class MainStore implements ILocalStore {
   };
 
   handleSuccessMessage = (message: ServerEnvelope) => {
-    console.log('Client received success', message);
     switch (true) {
       case 'subscriptionId' in message.message:
         if ('subscriptionId' in message.message) {
@@ -137,14 +143,14 @@ export default class MainStore implements ILocalStore {
   };
 
   handleMarketDataUpdate = (message: ServerEnvelope) => {
-    console.log('marketDataUpdate on client', message.message);
     const {
-      quotes: { sell, purchase },
+      quotes: { sell, purchase, timestamps },
     } = message.message as ClientMarketDataUpdate;
 
     if (this._isActualSubscriptionId) {
       this._sellingRate = sell.map((rate) => new Decimal(rate.offer));
       this._purchaseRate = purchase.map((rate) => new Decimal(rate.offer));
+      this._timestamps = timestamps;
     }
   };
 
