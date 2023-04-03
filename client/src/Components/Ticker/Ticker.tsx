@@ -1,6 +1,7 @@
 import { useCallback } from 'react';
 
 import { observer } from 'mobx-react-lite';
+import toast from 'react-hot-toast';
 
 import Dropdown from './Dropdown';
 import classes from './Ticker.module.scss';
@@ -31,15 +32,28 @@ const Ticker = ({ store }: TickerProps): JSX.Element => {
 
   const handlePlaceOrder = useCallback(
     (buttonType: ButtonType) => {
-      // TODO add notification to choose instrument amount
-      if (!instrumentAmount) return;
+      if (!instrumentAmount) {
+        toast.error('Please, provide instrument amount');
+        return;
+      }
+      if (!currentSellingRate || !currentPurchaseRate) {
+        toast.error('Please, wait a second for quotes update');
+        return;
+      }
 
       const side =
         buttonType === ButtonType.sell ? OrderSide.sell : OrderSide.buy;
       placeOrder({ side, amount: instrumentAmount });
+      toast.success('Your transaction is being processed');
       setInstrumentAmount(null);
     },
-    [instrumentAmount, placeOrder, setInstrumentAmount],
+    [
+      instrumentAmount,
+      currentSellingRate,
+      currentPurchaseRate,
+      placeOrder,
+      setInstrumentAmount,
+    ],
   );
 
   return (

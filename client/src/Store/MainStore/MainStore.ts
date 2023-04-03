@@ -1,5 +1,6 @@
 import Decimal from 'decimal.js';
 import { action, computed, makeObservable, observable } from 'mobx';
+import toast from 'react-hot-toast';
 
 import { Instrument, OrderSide, OrderStatus } from '../../Config/Enums';
 import { ClientPlaceOrder, PlaceOrder } from '../../Models/ClientMessages';
@@ -157,6 +158,7 @@ export default class MainStore implements ILocalStore {
       ...this._orders,
       [orderId]: updatedOrder,
     };
+    toast.success('Transaction completed');
   };
 
   destroy = () => {
