@@ -6,5 +6,18 @@
     font-weight: bold;
     background-color: $color-background-table-header;
     border: 1px solid $color-border;
+    cursor: pointer;
+
+    &_sort-up::after {
+      position: relative;
+      content: '▲';
+      right: -5px;
+    }
+
+    &_sort-down::after {
+      position: relative;
+      content: '▼';
+      right: -5px;
+    }
   }
 }

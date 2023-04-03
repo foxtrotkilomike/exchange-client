@@ -7,6 +7,7 @@ import TableHeader from './TableHeader';
 import TableRow from './TableRow';
 import { tableHeader } from '../../Config/Data';
 import MainStore from '../../Store/MainStore';
+import SortMethod from '../../Types/SortMethod';
 import TableRowT from '../../Types/TableRow';
 import prepareOrders from '../../Utils/prepareOrders';
 
@@ -19,6 +20,7 @@ type SortableField = TableRowT;
 const Table = ({ store }: TableProps): JSX.Element => {
   const { orders: ordersMap } = store;
   const [sortField, setSortField] = useState<SortableField>('creationTime');
+  const [sortMethod, setSortMethod] = useState<SortMethod>(SortMethod.up);
   const [isEmptyTable, setIsEmptyTable] = useState(true);
 
   useEffect(() => {
@@ -26,15 +28,27 @@ const Table = ({ store }: TableProps): JSX.Element => {
     setIsEmptyTable(ordersLength === 0);
   }, [ordersMap]);
 
+  const handleHeaderColumnClick = (columnLabel: TableRowT) => {
+    setSortField(columnLabel);
+    setSortMethod((currentMethod) =>
+      currentMethod === SortMethod.up ? SortMethod.down : SortMethod.up,
+    );
+  };
+
   const renderRows = (): JSX.Element[] => {
-    const orders = prepareOrders(ordersMap, sortField);
+    const orders = prepareOrders(ordersMap, sortField, sortMethod);
     return orders.map((row) => <TableRow row={row} key={row.orderId} />);
   };
 
   return (
     <>
       <table className={classes.table}>
-        <TableHeader headerConfig={tableHeader} />
+        <TableHeader
+          headerConfig={tableHeader}
+          onColumnClick={handleHeaderColumnClick}
+          sortField={sortField}
+          sortMethod={sortMethod}
+        />
         {!isEmptyTable && <tbody>{renderRows()}</tbody>}
       </table>
       {isEmptyTable && (
