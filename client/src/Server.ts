@@ -105,7 +105,6 @@ export default class Server extends EventTarget {
   };
 
   subscribeMarketData = (message: ClientEnvelope) => {
-    console.log('Sever received subscribeMarketData', message.message);
     const subscriptionInstrument = (message.message as SubscribeMarketData)
       .instrument;
     const subscriptionId = Math.round(Math.random() * 1000000).toString();
@@ -115,23 +114,7 @@ export default class Server extends EventTarget {
       message: { subscriptionId: subscriptionId },
     });
 
-    const subscriptionIntervalId = setInterval(
-      () =>
-        this.send({
-          messageType: ServerMessageType.marketDataUpdate,
-          message: {
-            subscriptionId: subscriptionId,
-            instrument: subscriptionInstrument,
-            quotes: {
-              sell: this._sellQuotes[subscriptionInstrument],
-              purchase: this._purchaseQuotes[subscriptionInstrument],
-            },
-          },
-        }),
-      this._quotesUpdateInterval,
-    );
-
-    this._subscriptionsId[subscriptionId] = subscriptionIntervalId;
+    this.createSubscription(subscriptionId, subscriptionInstrument);
   };
 
   unsubscribeMarketData = (message: ClientEnvelope) => {
@@ -159,6 +142,29 @@ export default class Server extends EventTarget {
     });
   };
 
+  createSubscription = (
+    subscriptionId: string,
+    subscriptionInstrument: Instrument,
+  ) => {
+    const subscriptionIntervalId = setInterval(
+      () =>
+        this.send({
+          messageType: ServerMessageType.marketDataUpdate,
+          message: {
+            subscriptionId: subscriptionId,
+            instrument: subscriptionInstrument,
+            quotes: {
+              sell: this._sellQuotes[subscriptionInstrument],
+              purchase: this._purchaseQuotes[subscriptionInstrument],
+            },
+          },
+        }),
+      this._quotesUpdateInterval,
+    );
+
+    this._subscriptionsId[subscriptionId] = subscriptionIntervalId;
+  };
+
   updateAllQuotes = () => {
     this.updateSellQuotes();
     this.updatePurchaseQuotes();
@@ -178,18 +184,22 @@ export default class Server extends EventTarget {
     Object.entries(quotes).forEach(([quoteType, quoteValue]) => {
       const pivotQuote = pivotQuotes[quoteType as Instrument];
       const currentQuote = quoteValue.at(-1)?.offer.toNumber() || pivotQuote;
-      const sign = Math.random() < 0.5 ? -1 : 1;
-      const deviationPercentage = 0.005;
-      const newQuoteOffer =
-        currentQuote + Math.random() * deviationPercentage * pivotQuote * sign;
-      const newQuote: Quote = {
-        bid: new Decimal(0),
-        offer: new Decimal(newQuoteOffer),
-        minAmount: new Decimal(0),
-        maxAmount: new Decimal(1000000),
-      };
+      const newQuote = this.createQuote(currentQuote, pivotQuote);
       quotes[quoteType as Instrument].push(newQuote);
     });
+  };
+
+  createQuote = (currentQuote: number, pivotQuote: number) => {
+    const sign = Math.random() < 0.5 ? -1 : 1;
+    const deviationPercentage = 0.005;
+    const newQuoteOffer =
+      currentQuote + Math.random() * deviationPercentage * pivotQuote * sign;
+    return {
+      bid: new Decimal(0),
+      offer: new Decimal(newQuoteOffer),
+      minAmount: new Decimal(0),
+      maxAmount: new Decimal(1000000),
+    };
   };
 
   getQuotes = (type: OrderSide) => {
