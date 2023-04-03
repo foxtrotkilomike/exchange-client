@@ -11,7 +11,7 @@ export enum ButtonType {
 type TickerControlProps = {
   value: Decimal | undefined;
   buttonType: ButtonType;
-  onClick: () => void;
+  onClick: (buttonType: ButtonType) => void;
 };
 
 const TickerControl = ({
@@ -42,7 +42,7 @@ const TickerControl = ({
       <p className={classes.control__text} title={value?.toString()}>
         {value === undefined ? '-' : renderControlValue(value)}
       </p>
-      <button onClick={onClick} className={buttonClassName}>
+      <button onClick={() => onClick(buttonType)} className={buttonClassName}>
         {buttonType}
       </button>
     </div>

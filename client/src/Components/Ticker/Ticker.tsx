@@ -8,7 +8,7 @@ import TickerControl from './TickerControl';
 import { ButtonType } from './TickerControl/TickerControl';
 import TickerInput from './TickerInput';
 import { instrumentOptions } from '../../Config/Data';
-import { Instrument } from '../../Config/Enums';
+import { Instrument, OrderSide } from '../../Config/Enums';
 import MainStore from '../../Store/MainStore';
 
 type TickerProps = {
@@ -23,19 +23,24 @@ const Ticker = ({ store }: TickerProps): JSX.Element => {
     purchaseRate,
     setInstrument,
     setInstrumentAmount,
+    placeOrder,
   } = store;
 
   const currentSellingRate = sellingRate.at(-1);
   const currentPurchaseRate = purchaseRate.at(-1);
 
-  const handleSell = useCallback(() => {
-    console.log(currentSellingRate?.times(instrumentAmount || 0).toString());
-    setInstrumentAmount(null);
-  }, [currentSellingRate, instrumentAmount, setInstrumentAmount]);
-  const handlePurchase = useCallback(() => {
-    console.log(currentPurchaseRate?.times(instrumentAmount || 0).toString());
-    setInstrumentAmount(null);
-  }, [currentPurchaseRate, instrumentAmount, setInstrumentAmount]);
+  const handlePlaceOrder = useCallback(
+    (buttonType: ButtonType) => {
+      // TODO add notification to choose instrument amount
+      if (!instrumentAmount) return;
+
+      const side =
+        buttonType === ButtonType.sell ? OrderSide.sell : OrderSide.buy;
+      placeOrder({ side, amount: instrumentAmount });
+      setInstrumentAmount(null);
+    },
+    [instrumentAmount, placeOrder, setInstrumentAmount],
+  );
 
   return (
     <article className={classes.ticker}>
@@ -48,13 +53,13 @@ const Ticker = ({ store }: TickerProps): JSX.Element => {
       <div className={classes['controls-wrapper']}>
         <TickerControl
           value={currentSellingRate}
-          onClick={handleSell}
+          onClick={handlePlaceOrder}
           buttonType={ButtonType.sell}
         />
         <div className={classes['control-separator']} />
         <TickerControl
           value={currentPurchaseRate}
-          onClick={handlePurchase}
+          onClick={handlePlaceOrder}
           buttonType={ButtonType.buy}
         />
       </div>

@@ -1,17 +1,18 @@
 import classes from './TableRow.module.scss';
-import TTableRow from '../../../Types/TableRow';
+import { tableOrder } from '../../../Config/Data';
+import { ClientPlaceOrder } from '../../../Models/ClientMessages';
 import prepareCellValue from '../../../Utils/prepareCellValue';
 
 type TableRowProps = {
-  row: TTableRow;
+  row: ClientPlaceOrder;
 };
 
 const TableRow = ({ row }: TableRowProps): JSX.Element => {
   return (
     <tr className={classes.table__row}>
-      {Object.entries(row).map(([cellId, cellValue]) => (
-        <td key={cellId} className={classes['table__row-cell']}>
-          {prepareCellValue(cellValue)}
+      {tableOrder.map((cellKey) => (
+        <td key={cellKey} className={classes['table__row-cell']}>
+          {prepareCellValue(row[cellKey])}
         </td>
       ))}
     </tr>

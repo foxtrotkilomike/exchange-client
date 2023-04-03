@@ -1,11 +1,13 @@
 import Decimal from 'decimal.js';
 
-import TTableRow from '../Types/TableRow';
+import { ClientPlaceOrder } from '../Models/ClientMessages';
 
-const prepareCellValue = (cellValue: TTableRow[keyof TTableRow]) => {
+const prepareCellValue = (
+  cellValue: ClientPlaceOrder[keyof ClientPlaceOrder],
+): string => {
   switch (true) {
-    case typeof cellValue === 'number':
-      return cellValue as number;
+    case typeof cellValue === 'string':
+      return cellValue as string;
 
     case cellValue instanceof Date:
       return (cellValue as Date).toLocaleString('ru-RU');
@@ -14,7 +16,7 @@ const prepareCellValue = (cellValue: TTableRow[keyof TTableRow]) => {
       return (cellValue as Decimal).toFixed(5).toString();
 
     default:
-      return cellValue.toString();
+      return cellValue === null ? '-' : cellValue.toString();
   }
 };
 

@@ -10,7 +10,7 @@ const Main = (): JSX.Element => {
   return (
     <Wrapper main growing centered outer>
       <Ticker store={mainStore} />
-      <Table />
+      <Table store={mainStore} />
     </Wrapper>
   );
 };
