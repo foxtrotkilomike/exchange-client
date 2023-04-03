@@ -18,7 +18,7 @@ type TableProps = {
 type SortableField = TableRowT;
 
 const Table = ({ store }: TableProps): JSX.Element => {
-  const { orders: ordersMap } = store;
+  const { orders: ordersMap, cancelOrder } = store;
   const [sortField, setSortField] = useState<SortableField>('creationTime');
   const [sortMethod, setSortMethod] = useState<SortMethod>(SortMethod.up);
   const [isEmptyTable, setIsEmptyTable] = useState(true);
@@ -37,7 +37,9 @@ const Table = ({ store }: TableProps): JSX.Element => {
 
   const renderRows = (): JSX.Element[] => {
     const orders = prepareOrders(ordersMap, sortField, sortMethod);
-    return orders.map((row) => <TableRow row={row} key={row.orderId} />);
+    return orders.map((row) => (
+      <TableRow row={row} onOrderCancel={cancelOrder} key={row.orderId} />
+    ));
   };
 
   return (

@@ -5,5 +5,21 @@
     padding: 10px;
     text-align: center;
     border: 1px solid $color-border-light;
+
+    &_fail, &_sell {
+      color: $color-cancel;
+    }
+
+    &_success, &_buy {
+      color: $color-success;
+    }
   }
+}
+
+.cancel-button {
+  padding: 3px 6px;
+  color: $color-cancel;
+  font-weight: bold;
+  border: 1px solid $color-cancel;
+  border-radius: 5px;
 }

@@ -102,4 +102,13 @@ export default class WSConnector implements IWSConnector {
       },
     });
   };
+
+  cancelOrder = (orderId: string) => {
+    this.send({
+      messageType: ClientMessageType.cancelOrder,
+      message: {
+        orderId,
+      },
+    });
+  };
 }

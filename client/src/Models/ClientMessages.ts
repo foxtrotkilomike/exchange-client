@@ -23,6 +23,10 @@ export interface UnsubscribeMarketData extends ClientMessageInit {
   subscriptionId: string;
 }
 
+export interface CancelOrder extends ClientMessageInit {
+  orderId: string;
+}
+
 export interface PlaceOrder extends ClientMessageInit {
   orderId: string;
   instrument: Instrument;
@@ -53,4 +57,5 @@ export interface ServerPlaceOrder extends ClientMessageInit {
 export type ClientMessage =
   | SubscribeMarketData
   | UnsubscribeMarketData
-  | PlaceOrder;
+  | PlaceOrder
+  | CancelOrder;

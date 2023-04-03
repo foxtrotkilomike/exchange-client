@@ -11,6 +11,7 @@ import {
 import MessageEvent from './MessageEvent';
 import { Quote } from './Models/Base';
 import {
+  CancelOrder,
   ClientEnvelope,
   ServerPlaceOrder,
   SubscribeMarketData,
@@ -19,6 +20,7 @@ import {
 import { ServerEnvelope } from './Models/ServerMessages';
 import MessageEventT from './Types/MessageEvent';
 import generateId from './Utils/generateId';
+import getRandomOrderStatus from './Utils/getRandomOrderStatus';
 import WebSocket from './WebSocket';
 
 type QuotesMap = Record<Instrument, Quote[]>;
@@ -49,7 +51,9 @@ export default class Server extends EventTarget {
   private _timestamps: string[] = [];
   private _updateQuotesIntervalId: ReturnType<typeof setInterval> | null = null;
   private _subscriptionsId: Record<string, ReturnType<typeof setInterval>> = {};
+  private _ordersId: Record<string, ReturnType<typeof setTimeout>> = {};
   private _quotesUpdateInterval = 3000;
+  private _orderProcessingInterval = 6000;
   private _serverResponseDelay = 300;
 
   constructor(webSocket: WebSocket) {
@@ -83,6 +87,10 @@ export default class Server extends EventTarget {
           break;
         case ClientMessageType.placeOrder:
           this.placeOrder(message);
+          break;
+
+        case ClientMessageType.cancelOrder:
+          this.cancelOrder(message);
           break;
       }
     } catch (err) {
@@ -148,9 +156,32 @@ export default class Server extends EventTarget {
   };
 
   processOrder = async (order: ServerPlaceOrder): Promise<OrderStatus> => {
-    return new Promise((res) =>
-      setTimeout(() => res(OrderStatus.filled), 4000),
-    );
+    return new Promise((res) => {
+      const timeout = setTimeout(
+        () => res(getRandomOrderStatus()),
+        this._orderProcessingInterval,
+      );
+
+      this._ordersId[order.orderId] = timeout;
+    });
+  };
+
+  cancelOrder = (message: ClientEnvelope) => {
+    const { orderId } = message.message as CancelOrder;
+    const timeout = this._ordersId[orderId];
+
+    if (timeout) {
+      clearTimeout(timeout);
+      delete this._ordersId[orderId];
+
+      this.send({
+        messageType: ServerMessageType.executionReport,
+        message: {
+          orderId: orderId,
+          orderStatus: OrderStatus.cancelled,
+        },
+      });
+    }
   };
 
   createSubscription = (

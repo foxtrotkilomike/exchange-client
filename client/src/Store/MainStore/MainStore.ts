@@ -131,6 +131,10 @@ export default class MainStore implements ILocalStore {
     }
   };
 
+  cancelOrder = (orderId: string) => {
+    this._connection.cancelOrder(orderId);
+  };
+
   handleSuccessMessage = (message: ServerEnvelope) => {
     switch (true) {
       case 'subscriptionId' in message.message:
@@ -155,7 +159,6 @@ export default class MainStore implements ILocalStore {
   };
 
   handleExecutionReport = (message: ServerEnvelope) => {
-    console.log('execution report on client', message.message);
     const { orderId, orderStatus } = message.message as ExecutionReport;
     const updatedOrder = this._orders[orderId];
     updatedOrder.status = orderStatus;

@@ -26,6 +26,11 @@ const TableHeader = ({
         cellSortField === sortField && sortMethod === SortMethod.down,
     });
 
+  const cancelHeaderColumnClassName = classNames(
+    classes['table__header-cell'],
+    classes['table__header-cell_cancel'],
+  );
+
   return (
     <thead className={classes.table__header}>
       <tr>
@@ -38,6 +43,7 @@ const TableHeader = ({
             {headerConfig[columnLabel]}
           </th>
         ))}
+        <th className={cancelHeaderColumnClassName}>Cancel order</th>
       </tr>
     </thead>
   );
